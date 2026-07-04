@@ -604,8 +604,9 @@ function testBadgeHtml(subject){
 
 function examBadgeHtml(subject){
   const st = ensureSubjectState(subject.id);
-  const count = st.examsCompleted || 0;
-  return `<span class="badge${count>0 ? " done":""}">Full simulations completed: ${count}</span>`;
+  const started = st.examsStarted || 0;
+  const completed = st.examsCompleted || 0;
+  return `<span class="badge">Attempts started: ${started}</span> <span class="badge${completed>0 ? " done":""}">Completed: ${completed}</span>`;
 }
 
 function renderSubjectPanel(subject){
@@ -639,10 +640,11 @@ function renderSubjectPanel(subject){
           <h2>Full exam simulation</h2>
         </div>
         <div class="button-row">
-          <button id="startExam-${subject.id}">Start full exam simulation</button>
+          <button id="startExam-${subject.id}">Start new full exam simulation</button>
           <button class="secondary" id="finishExam-${subject.id}">Finish simulation</button>
         </div>
       </div>
+      <p class="q-help">Unlimited attempts &mdash; every click draws a fresh, randomly assembled exam from the question bank, so no two attempts are the same.</p>
       <div class="test-progress" id="examProgress-${subject.id}">${examBadgeHtml(subject)}</div>
     </article>
     <div id="exam-${subject.id}"></div>
@@ -660,13 +662,20 @@ function renderSubjectPanel(subject){
   });
 
   if(exam){
-    byId("startExam-" + subject.id).addEventListener("click", () => renderExamSimulation(subject));
+    byId("startExam-" + subject.id).addEventListener("click", () => {
+      const st = ensureSubjectState(subject.id);
+      st.examsStarted = (st.examsStarted || 0) + 1;
+      saveState();
+      byId("examProgress-" + subject.id).innerHTML = examBadgeHtml(subject);
+      renderExamSimulation(subject);
+    });
     byId("finishExam-" + subject.id).addEventListener("click", () => {
       const st = ensureSubjectState(subject.id);
       st.examsCompleted = (st.examsCompleted || 0) + 1;
       saveState();
       logStudyToday();
       byId("examProgress-" + subject.id).innerHTML = examBadgeHtml(subject);
+      renderOverview();
     });
   }
 
@@ -688,9 +697,10 @@ function renderTest(subject){
 function renderExamSimulation(subject){
   const container = byId("exam-" + subject.id);
   const exam = subject.exam;
+  const st = ensureSubjectState(subject.id);
   const allItems = []; // flat list of {section, item, idPrefix} for listener wiring after render
 
-  let html = "";
+  let html = `<p class="q-help"><strong>Attempt #${st.examsStarted || 1}</strong> &mdash; freshly randomized just now.</p>`;
   exam.sections.forEach((section, sIndex) => {
     const marksLabel = section.marks ? `${section.marks} marks` : "marks vary";
     html += `
