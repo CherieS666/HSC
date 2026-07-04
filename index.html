@@ -268,6 +268,23 @@ SUBJECTS.push({
     {topic:"Universe to the Atom", prompt:"A sample has a half-life of 8 days. Starting with 80 g, how many grams remain after 24 days?", answer:10, help:"24 days = 3 half-lives, so 80/2\u00b3."},
     {topic:"Universe to the Atom", prompt:"A fission reaction releases 200 MeV per event. How much energy (MeV) is released by 5 events?", answer:1000, help:"200 \u00d7 5."}
   ],
+  extended:[
+    {topic:"Advanced Mechanics", marks:6, prompt:"A car of mass 1200 kg travels around a banked curve of radius 80 m at constant speed with no reliance on friction. Derive an expression for the optimum speed and explain the role of the normal force and gravity in providing centripetal force.", keyPoints:["Resolves the normal force into vertical and horizontal components","Identifies the horizontal component of the normal force as the source of centripetal force","Derives v = \u221a(rg\u00b7tan\u03b8)","Explains why no friction is needed when this component exactly matches the required centripetal force"]},
+    {topic:"Advanced Mechanics", marks:4, prompt:"Using Kepler's laws and Newton's law of gravitation, explain why a satellite closer to Earth requires a shorter orbital period.", keyPoints:["States T\u00b2 \u221d r\u00b3 (Kepler's Third Law)","Links a smaller orbital radius to a smaller period","Explains via gravitational force providing centripetal force"]},
+    {topic:"Electromagnetism", marks:7, prompt:"Compare the energy transformations in an AC generator and an electric motor, and explain why back-EMF is significant in a motor's operation.", keyPoints:["Generator: kinetic \u2192 electrical via electromagnetic induction","Motor: electrical \u2192 kinetic via force on a current-carrying coil","Back-EMF opposes the supply voltage as the coil spins","Back-EMF limits current draw and protects the motor at running speed"]},
+    {topic:"Electromagnetism", marks:5, prompt:"Explain two reasons why real transformers are not 100% efficient.", keyPoints:["Eddy currents causing heat loss in the core","Hysteresis losses in the magnetic material","Resistive (I\u00b2R) losses in the windings","Flux leakage / incomplete flux linkage between coils"]},
+    {topic:"Nature of Light", marks:6, prompt:"Explain how the photoelectric effect provides evidence for the particle model of light, contrasting this with the wave model's failure to explain the effect.", keyPoints:["Describes threshold frequency and instantaneous emission","Explains via photon energy E = hf","Contrasts with the wave model's prediction that intensity (not frequency) should matter","References Einstein's photoelectric equation"]},
+    {topic:"Nature of Light", marks:5, prompt:"Outline the key features of special relativity that led to a shift away from Newtonian views of time and space.", keyPoints:["Constancy of the speed of light for all observers","Relativity of simultaneity","Time dilation and length contraction as consequences","Abandonment of absolute space/time (the ether)"]},
+    {topic:"Universe to the Atom", marks:6, prompt:"Explain the process of nuclear fusion in main-sequence stars and its role in producing elements up to iron.", keyPoints:["Hydrogen fuses to helium via the proton-proton chain","Later stages fuse progressively heavier elements as the star evolves","Fusion energy balances gravitational collapse","Fusion up to iron is exothermic; heavier elements require supernova conditions"]},
+    {topic:"Universe to the Atom", marks:5, prompt:"Discuss how the Standard Model classifies particles into quarks, leptons and bosons, outlining the role of each category.", keyPoints:["Quarks combine to form hadrons (e.g. protons, neutrons)","Leptons include the electron and neutrinos","Bosons are force carriers (e.g. the photon for the EM force)","Links categories to the four fundamental forces"]}
+  ],
+  exam:{
+    totalMarks:100, totalMinutes:180,
+    sections:[
+      {name:"Section I \u2013 Multiple Choice", marks:20, minutes:35, type:"mcq", count:20},
+      {name:"Section II \u2013 Extended Response (condensed)", marks:null, minutes:90, type:"extended", count:8, note:"The real Section II has ~14 questions worth 80 marks. This is a condensed set of 8 covering the same four modules \u2014 use it to practise extended written responses, not as a full mark-for-mark replica."}
+    ]
+  },
   nesaCategory:"Science", nesaCategoryLabel:"Science"
 });
 
@@ -311,6 +328,23 @@ SUBJECTS.push({
     {topic:"Non-Infectious Disease", q:"Multifactorial diseases (e.g. heart disease) are caused by:", options:["a single gene only","a single environmental factor only","a combination of genetic and environmental factors","random chance only"], correct:2, explain:"Multifactorial diseases arise from combined genetic and environmental influences."}
   ],
   numeric:[],
+  extended:[
+    {topic:"Heredity", marks:6, prompt:"Explain how meiosis and fertilisation contribute to genetic variation within a species.", keyPoints:["Crossing over during prophase I","Independent assortment of chromosomes","Random fertilisation of gametes","Each mechanism contributes unique allele combinations"]},
+    {topic:"Heredity", marks:5, prompt:"Using a specific example, explain how a pedigree can be used to determine the pattern of inheritance of a genetic disorder.", keyPoints:["Identifies the pattern: autosomal/sex-linked, dominant/recessive","Explains how the distribution of affected/unaffected individuals across generations reveals the pattern","Notes expected ratios/probabilities of inheritance"]},
+    {topic:"Genetic Change", marks:7, prompt:"Discuss the ethical, social and economic implications of using genetic technologies such as gene therapy or GMOs.", keyPoints:["Ethical: consent, unintended consequences, 'playing god' concerns","Social: access/equity issues, public perception","Economic: cost of technology vs benefits to agriculture/medicine","A balanced discussion of both sides is needed for full marks"]},
+    {topic:"Genetic Change", marks:5, prompt:"Explain how selective breeding differs from genetic engineering in producing desired traits in organisms.", keyPoints:["Selective breeding: gradual, relies on existing variation, many generations","Genetic engineering: direct, targeted gene insertion/editing, faster","Both aim for desirable traits but differ in method and precision"]},
+    {topic:"Infectious Disease", marks:6, prompt:"Explain how the immune system responds to a viral infection, referring to both innate and adaptive immune responses.", keyPoints:["Innate: physical barriers, phagocytes, inflammation","Adaptive: antigen recognition, B cells produce antibodies, T cells destroy infected cells","Memory cell formation provides future immunity"]},
+    {topic:"Infectious Disease", marks:5, prompt:"Discuss the effectiveness of quarantine and vaccination programs in controlling the spread of infectious disease.", keyPoints:["Quarantine limits transmission by isolating infected/exposed individuals","Vaccination builds herd immunity, reducing the susceptible population","Both have limitations (compliance, new pathogen strains)"]},
+    {topic:"Non-Infectious Disease", marks:6, prompt:"Explain how epidemiological studies are used to identify risk factors for non-infectious diseases such as cardiovascular disease.", keyPoints:["Large-scale population studies compare affected/unaffected groups","Identify correlations with lifestyle/environmental/genetic factors","Correlation doesn't imply causation, but guides further research","Example: smoking and heart disease"]},
+    {topic:"Non-Infectious Disease", marks:5, prompt:"Discuss how technological advances have improved the diagnosis and management of non-infectious diseases.", keyPoints:["Imaging technologies (MRI, CT) enable earlier, more accurate diagnosis","Genetic screening identifies predisposition","Management via monitoring devices and targeted therapies","Overall improves patient outcomes and quality of life"]}
+  ],
+  exam:{
+    totalMarks:100, totalMinutes:180,
+    sections:[
+      {name:"Section I \u2013 Multiple Choice", marks:20, minutes:35, type:"mcq", count:20},
+      {name:"Section II \u2013 Extended Response (condensed)", marks:null, minutes:90, type:"extended", count:8, note:"The real Section II has ~14 questions worth 80 marks. This is a condensed set of 8 covering the same four modules \u2014 use it to practise extended written responses, not as a full mark-for-mark replica."}
+    ]
+  },
   nesaCategory:"Science", nesaCategoryLabel:"Science"
 });
 
@@ -361,7 +395,14 @@ SUBJECTS.push({
     {topic:"Statistics", prompt:"In a normal distribution, about what % of data lies within 1 standard deviation of the mean?", answer:68, help:"The empirical rule: ~68% within 1 SD."},
     {topic:"Statistics", prompt:"Find the mean of: 10, 20, 30, 40.", answer:25, help:"Sum divided by count."},
     {topic:"Statistics", prompt:"A test has mean 65 and SD 10. A student's z-score was 1.5. Find their raw score.", answer:80, help:"x = \u03bc + z\u03c3."}
-  ]
+  ],
+  exam:{
+    totalMarks:100, totalMinutes:180,
+    sections:[
+      {name:"Section I \u2013 Multiple Choice", marks:10, minutes:15, type:"numeric", count:10},
+      {name:"Section II \u2013 Extended Response (condensed)", marks:null, minutes:165, type:"numeric", count:20, note:"The real Section II has ~22 parts worth 90 marks. This set gives 20 practice items across the same five topics."}
+    ]
+  }
 });
 
 // ---- Maths Extension 1 (numeric bank) ----
@@ -403,7 +444,13 @@ SUBJECTS.push({
     {topic:"Polynomials & Rates", prompt:"A tank's volume changes at dV/dt=6t. Find the total change in volume from t=0 to t=4.", answer:48, help:"\u222b\u2080\u2074 6t dt = 3t\u00b2 from 0 to 4."},
     {topic:"Polynomials & Rates", prompt:"Find the acceleration of x(t)=t\u00b3-3t at t=1 (second derivative).", answer:6, help:"x''(t)=6t, x''(1)=6."},
     {topic:"Polynomials & Rates", prompt:"A polynomial has roots -1, 2, 3: P(x)=(x+1)(x-2)(x-3). Find P(0).", answer:6, help:"P(0)=(1)(-2)(-3)=6."}
-  ]
+  ],
+  exam:{
+    totalMarks:70, totalMinutes:120,
+    sections:[
+      {name:"Full Paper (no multiple choice)", marks:null, minutes:120, type:"numeric", count:24, note:"The real paper has ~3 large multi-part questions worth 70 marks total. This set gives 24 shorter practice items across the same four topics for broader coverage."}
+    ]
+  }
 });
 
 // ---- English Standard (essay bank) ----
@@ -441,7 +488,17 @@ SUBJECTS.push({
     {topic:"Module C", prompt:"'Belonging is found, not given.' To what extent does this align with your prescribed text?"},
     {topic:"Module C", prompt:"Discuss how your prescribed text uses setting to reflect a character's internal journey."},
     {topic:"Module C", prompt:"Compare the representation of conflict in two texts you have studied this year (any modules)."}
-  ]
+  ],
+  exam:{
+    totalMarks:100, totalMinutes:210,
+    sections:[
+      {name:"Paper 1 \u2013 Section I (analysis, condensed)", marks:20, minutes:45, type:"essay", count:2, tagFilter:"Paper 1", note:"The real Section I is 5-6 short-answer questions on unseen stimulus texts. Since that needs fresh unseen texts each time, this substitutes two analytical prompts on your own prescribed/related texts \u2014 good practice for the analytical skill, not a stimulus-response replica."},
+      {name:"Paper 1 \u2013 Section II (extended response)", marks:20, minutes:45, type:"essay", count:1, tagFilter:"Paper 1"},
+      {name:"Paper 2 \u2013 Module A", marks:20, minutes:40, type:"essay", count:1, tagFilter:"Module A"},
+      {name:"Paper 2 \u2013 Module B", marks:20, minutes:40, type:"essay", count:1, tagFilter:"Module B"},
+      {name:"Paper 2 \u2013 Module C", marks:20, minutes:40, type:"essay", count:1, tagFilter:"Module C"}
+    ]
+  }
 });
 
 // ---- Studies of Religion I (essay bank) ----
@@ -479,7 +536,15 @@ SUBJECTS.push({
     {topic:"Electives", prompt:"Describe the role of significant practices in the everyday lives of adherents."},
     {topic:"Electives", prompt:"Explain how religious traditions address contemporary ethical issues such as poverty or inequality."},
     {topic:"Electives", prompt:"Explain how your studied tradition's teachings on peace apply to a real-world conflict or issue."}
-  ]
+  ],
+  exam:{
+    totalMarks:50, totalMinutes:90,
+    sections:[
+      {name:"Section I \u2013 Short Answer (condensed)", marks:15, minutes:25, type:"essay", count:2, tagFilter:"Nature of Religion"},
+      {name:"Section II \u2013 Religious Tradition", marks:15, minutes:30, type:"essay", count:1, tagFilter:"Religious Tradition"},
+      {name:"Section III \u2013 Religious Tradition (different focus)", marks:20, minutes:35, type:"essay", count:1, tagFilter:"Electives", note:"The real exam requires a different Religious Tradition to Section II; this draws from the Electives set to keep the two responses distinct."}
+    ]
+  }
 });
 
 // ---------------- Queues for random, non-repeating draws ----------------
@@ -537,8 +602,15 @@ function testBadgeHtml(subject){
   return `<span class="badge${st.testsCompleted>0 && st.testsCompleted%20===0 ? " done":""}">Practice Test ${Math.min(displayNum,20)} of 20</span>`;
 }
 
+function examBadgeHtml(subject){
+  const st = ensureSubjectState(subject.id);
+  const count = st.examsCompleted || 0;
+  return `<span class="badge${count>0 ? " done":""}">Full simulations completed: ${count}</span>`;
+}
+
 function renderSubjectPanel(subject){
   const panel = byId("panel-" + subject.id);
+  const exam = subject.exam;
   panel.innerHTML = `
     <article class="real-papers">
       <h3>Real HSC past papers</h3>
@@ -559,6 +631,22 @@ function renderSubjectPanel(subject){
       <div class="topic-legend">${subject.topics.map(t => `<span>${t}</span>`).join("")}</div>
     </article>
     <div id="questions-${subject.id}"></div>
+    ${exam ? `
+    <article class="test-head">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Real exam structure: ${exam.totalMarks} marks &middot; ${exam.totalMinutes} minutes</p>
+          <h2>Full exam simulation</h2>
+        </div>
+        <div class="button-row">
+          <button id="startExam-${subject.id}">Start full exam simulation</button>
+          <button class="secondary" id="finishExam-${subject.id}">Finish simulation</button>
+        </div>
+      </div>
+      <div class="test-progress" id="examProgress-${subject.id}">${examBadgeHtml(subject)}</div>
+    </article>
+    <div id="exam-${subject.id}"></div>
+    ` : ""}
   `;
 
   byId("newTest-" + subject.id).addEventListener("click", () => renderTest(subject));
@@ -570,6 +658,17 @@ function renderSubjectPanel(subject){
     byId("progress-" + subject.id).innerHTML = testBadgeHtml(subject);
     renderOverview();
   });
+
+  if(exam){
+    byId("startExam-" + subject.id).addEventListener("click", () => renderExamSimulation(subject));
+    byId("finishExam-" + subject.id).addEventListener("click", () => {
+      const st = ensureSubjectState(subject.id);
+      st.examsCompleted = (st.examsCompleted || 0) + 1;
+      saveState();
+      logStudyToday();
+      byId("examProgress-" + subject.id).innerHTML = examBadgeHtml(subject);
+    });
+  }
 
   renderTest(subject);
 }
@@ -584,6 +683,138 @@ function renderTest(subject){
     renderEssayTest(subject, container);
   }
 }
+
+// ---------------- Full exam simulation renderer ----------------
+function renderExamSimulation(subject){
+  const container = byId("exam-" + subject.id);
+  const exam = subject.exam;
+  const allItems = []; // flat list of {section, item, idPrefix} for listener wiring after render
+
+  let html = "";
+  exam.sections.forEach((section, sIndex) => {
+    const marksLabel = section.marks ? `${section.marks} marks` : "marks vary";
+    html += `
+      <article class="test-head">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">${marksLabel} &middot; about ${section.minutes} minutes</p>
+            <h2>${section.name}</h2>
+          </div>
+        </div>
+        ${section.note ? `<p class="q-help">${section.note}</p>` : ""}
+      </article>
+    `;
+
+    let items;
+    if(section.type === "mcq" || section.type === "numeric"){
+      items = shuffledCopy(subject.bank).slice(0, section.count);
+    } else if(section.type === "extended"){
+      items = shuffledCopy(subject.extended).slice(0, section.count);
+    } else if(section.type === "essay"){
+      const pool = subject.bank.filter(p => p.topic === section.tagFilter);
+      items = shuffledCopy(pool).slice(0, section.count);
+    }
+
+    items.forEach((item, iIndex) => {
+      const idPrefix = `exam-${subject.id}-${sIndex}-${iIndex}`;
+      allItems.push({ type: section.type, item, idPrefix });
+
+      if(section.type === "mcq"){
+        html += `
+          <article class="q-card">
+            <span class="q-topic">${item.topic}</span>
+            <p class="q-prompt"><strong>${iIndex+1}.</strong> ${item.q}</p>
+            <div class="options" id="opts-${idPrefix}">
+              ${item.options.map((opt,oi) => `<button class="option-btn" data-oi="${oi}" type="button">${opt}</button>`).join("")}
+            </div>
+            <div class="q-explain" id="explain-${idPrefix}">${item.explain}</div>
+          </article>`;
+      } else if(section.type === "numeric"){
+        html += `
+          <article class="q-card">
+            <span class="q-topic">${item.topic}</span>
+            <p class="q-prompt"><strong>${iIndex+1}.</strong> ${item.prompt}</p>
+            <p class="q-help">${item.help}</p>
+            <div class="numeric-row">
+              <input type="number" step="0.01" id="input-${idPrefix}" aria-label="Answer">
+              <button data-check="${idPrefix}">Check</button>
+            </div>
+            <span class="q-feedback" id="feedback-${idPrefix}"></span>
+          </article>`;
+      } else if(section.type === "extended"){
+        html += `
+          <article class="q-card">
+            <span class="q-topic">${item.topic} &middot; ${item.marks} marks</span>
+            <p class="q-prompt"><strong>${iIndex+1}.</strong> ${item.prompt}</p>
+            <textarea placeholder="Draft your response here (optional, not saved)..." id="draft-${idPrefix}"></textarea>
+            <button class="secondary" data-reveal="${idPrefix}" type="button">Reveal key points to self-mark</button>
+            <div class="q-explain" id="reveal-${idPrefix}">
+              <ul>${item.keyPoints.map(k => `<li>${k}</li>`).join("")}</ul>
+            </div>
+          </article>`;
+      } else if(section.type === "essay"){
+        html += `
+          <article class="essay-prompt">
+            <span class="q-topic">${item.topic}</span>
+            <p class="prompt-text"><strong>${iIndex+1}.</strong> ${item.prompt}</p>
+            <textarea placeholder="Plan or draft your response here (optional, not saved)..." id="draft-${idPrefix}"></textarea>
+            <div class="checklist">
+              ${subject.checklist.map((c,ci) => `<label><input type="checkbox" id="chk-${idPrefix}-${ci}"> ${c}</label>`).join("")}
+            </div>
+            <div class="band6"><strong>What Band 6 looks like:</strong> ${subject.band6}</div>
+          </article>`;
+      }
+    });
+  });
+
+  container.innerHTML = html;
+
+  allItems.forEach(({ type, item, idPrefix }) => {
+    if(type === "mcq"){
+      const wrap = byId("opts-" + idPrefix);
+      wrap.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const oi = Number(btn.dataset.oi);
+          wrap.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected","correct","incorrect"));
+          if(oi === item.correct){
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            wrap.children[item.correct].classList.add("correct");
+          }
+          byId("explain-" + idPrefix).classList.add("show");
+        });
+      });
+    } else if(type === "numeric"){
+      const checkBtn = container.querySelector(`button[data-check="${idPrefix}"]`);
+      checkBtn.addEventListener("click", () => {
+        const input = byId("input-" + idPrefix);
+        const feedback = byId("feedback-" + idPrefix);
+        if(input.value.trim() === ""){ feedback.textContent = "Try an answer first."; feedback.className="q-feedback"; return; }
+        const value = Number(input.value);
+        const tolerance = Number.isInteger(item.answer) ? 0.01 : 0.06;
+        if(Math.abs(value - item.answer) <= tolerance){
+          feedback.textContent = `Correct! ${item.answer}`;
+          feedback.className = "q-feedback correct";
+        } else {
+          feedback.textContent = `Review it. Answer: ${item.answer}`;
+          feedback.className = "q-feedback incorrect";
+        }
+      });
+    } else if(type === "extended"){
+      const revealBtn = container.querySelector(`button[data-reveal="${idPrefix}"]`);
+      revealBtn.addEventListener("click", () => {
+        byId("reveal-" + idPrefix).classList.toggle("show");
+      });
+    }
+    // essay type needs no extra JS wiring beyond native checkbox/textarea behaviour
+  });
+
+  if(typeof container.scrollIntoView === "function"){
+    container.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+
 
 // ---------------- MCQ test renderer ----------------
 function renderMcqTest(subject, container){
