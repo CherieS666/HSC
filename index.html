@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HSC Trial Studio</title>
+<style>
+:root {
+  --bg: #eef3fb;
+  --card: #ffffff;
+  --ink: #10203f;
+  --muted: #5c6b8a;
+  --line: #d7e1f2;
+  --primary: #2f6fed;
+  --primary-dark: #1c4fc0;
+  --primary-light: #e7effe;
+  --accent: #ff7e29;
+  --accent-dark: #e35f0a;
+  --green: #1fb673;
+  --green-light: #e3f9ee;
+  --coral: #ef4444;
+  --coral-light: #fdecec;
+  --purple: #7c5cff;
+  --yellow: #ffc93c;
+  --shadow: 0 10px 24px rgba(16, 32, 63, 0.08);
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body { margin:0; font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.45; }
+main { max-width:1100px; margin:0 auto; padding:20px 20px 60px; display:grid; gap:22px; }
+h1,h2,h3 { margin:0; }
+p { margin:0 0 10px; }
+button { font:inherit; cursor:pointer; border:none; border-radius:8px; padding:10px 16px; background:var(--primary); color:#fff; font-weight:700; transition:transform .08s ease, background .15s ease; }
+button:hover { background:var(--primary-dark); }
+button:active { transform:scale(.97); }
+button.secondary { background:var(--card); color:var(--primary-dark); border:2px solid var(--primary-light); }
+button.secondary:hover { background:var(--primary-light); }
+button.ghost { background:transparent; color:var(--muted); border:2px solid var(--line); }
+article { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); }
+
+.topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; background:linear-gradient(120deg,#0f1f42,#1c3d8f 60%,#2f6fed); color:#fff; padding:22px 24px; border-radius:0 0 20px 20px; flex-wrap:wrap; }
+.topbar .eyebrow { color:#a9c2ff; }
+.topbar h1 { font-size:1.8rem; }
+.eyebrow { text-transform:uppercase; letter-spacing:1.2px; font-size:.72rem; font-weight:800; color:var(--primary-dark); margin:0 0 4px; }
+.hero-stats { display:flex; gap:10px; flex-wrap:wrap; }
+.stat-chip { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.35); border-radius:12px; padding:10px 16px; text-align:right; display:grid; gap:2px; }
+.stat-chip span { font-size:.75rem; color:#cfe0ff; }
+.stat-chip strong { font-size:1.05rem; color:var(--yellow); }
+
+.overview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.subject-tile { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; display:grid; gap:6px; border-bottom:4px solid var(--primary); cursor:pointer; text-align:left; width:100%; color:var(--ink); }
+.subject-tile:hover { border-color: var(--primary-dark); }
+.subject-tile .tile-top { display:flex; justify-content:space-between; align-items:baseline; }
+.subject-tile strong { font-size:1.05rem; }
+.subject-tile .tile-count { font-size:1.4rem; font-weight:800; color:var(--primary-dark); }
+.subject-tile .tile-bar { height:8px; border-radius:6px; background:var(--line); overflow:hidden; }
+.subject-tile .tile-bar-fill { height:100%; background:var(--accent); }
+.subject-tile span.tile-sub { font-size:.8rem; color:var(--muted); }
+
+.tabs { display:flex; gap:8px; flex-wrap:wrap; }
+.tab { background:var(--card); color:var(--muted); border:2px solid var(--line); border-radius:10px; font-weight:800; padding:10px 16px; font-size:.9rem; }
+.tab:hover { background:var(--primary-light); color:var(--primary-dark); }
+.tab.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+.panel { display:none; }
+.panel.active { display:grid; gap:18px; }
+
+.section-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.section-head h2 { font-size:1.3rem; }
+.button-row { display:flex; gap:8px; flex-wrap:wrap; }
+
+.real-papers { padding:18px 20px; }
+.real-papers h3 { color:var(--primary-dark); margin-bottom:6px; font-size:1rem; }
+.real-papers p.note { color:var(--muted); font-size:.85rem; margin-bottom:10px; }
+.paper-links { display:flex; flex-wrap:wrap; gap:8px; }
+.paper-links a { background:var(--primary-light); color:var(--primary-dark); border-radius:8px; padding:8px 12px; font-weight:700; font-size:.85rem; text-decoration:none; }
+.paper-links a:hover { background:var(--primary); color:#fff; }
+
+.test-head { padding:18px 20px; display:grid; gap:10px; }
+.test-progress { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.test-progress .badge { background:var(--primary-light); color:var(--primary-dark); font-weight:800; border-radius:8px; padding:6px 12px; font-size:.85rem; }
+.test-progress .badge.done { background:var(--green-light); color:#0f7a4c; }
+
+.q-card { padding:16px 18px; display:grid; gap:10px; }
+.q-card .q-topic { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--purple); font-weight:800; }
+.q-card p.q-prompt { font-size:1rem; color:var(--ink); margin-bottom:0; }
+
+.options { display:grid; gap:8px; }
+.option-btn { text-align:left; background:#fff; border:2px solid var(--line); border-radius:8px; padding:10px 14px; color:var(--ink); font-weight:600; }
+.option-btn:hover { border-color:var(--primary); }
+.option-btn.selected { border-color:var(--primary); background:var(--primary-light); }
+.option-btn.correct { border-color:var(--green); background:var(--green-light); color:#0f7a4c; }
+.option-btn.incorrect { border-color:var(--coral); background:var(--coral-light); color:#b91c1c; }
+.q-explain { font-size:.85rem; color:var(--muted); background:var(--bg); border-radius:8px; padding:10px 12px; display:none; }
+.q-explain.show { display:block; }
+
+.numeric-row { display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; }
+.numeric-row input { min-height:42px; border:1px solid var(--line); border-radius:6px; padding:0 12px; font-size:1rem; }
+.q-feedback { font-size:.88rem; min-height:20px; color:var(--muted); }
+.q-feedback.correct { color:var(--green); font-weight:700; }
+.q-feedback.incorrect { color:var(--coral); font-weight:700; }
+.q-help { font-size:.82rem; color:var(--muted); }
+
+.essay-prompt { padding:18px 20px; display:grid; gap:10px; }
+.essay-prompt .prompt-text { font-size:1.02rem; font-weight:600; color:var(--ink); }
+.essay-prompt textarea { width:100%; min-height:140px; border:2px solid var(--line); border-radius:10px; padding:10px; font:inherit; resize:vertical; }
+.checklist { display:grid; gap:6px; background:var(--bg); border-radius:10px; padding:12px 14px; }
+.checklist label { display:flex; gap:8px; align-items:flex-start; font-size:.88rem; color:var(--ink); }
+.band6 { font-size:.85rem; color:var(--muted); background:var(--primary-light); border-radius:8px; padding:10px 12px; }
+.band6 strong { color:var(--primary-dark); }
+
+.topic-legend { display:flex; gap:8px; flex-wrap:wrap; font-size:.78rem; color:var(--muted); }
+.topic-legend span { background:var(--bg); border-radius:6px; padding:4px 10px; }
+
+@media (max-width:920px) {
+  .overview-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:640px) {
+  .overview-grid { grid-template-columns:1fr; }
+  .numeric-row { grid-template-columns:1fr; }
+  button { width:100%; }
+  .button-row { display:grid; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <p class="eyebrow">HSC 2026 &middot; Self-study trial platform</p>
+    <h1>HSC Trial Studio</h1>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-chip"><span>Exams start</span><strong id="countdownLabel">-</strong></div>
+    <div class="stat-chip"><span>Study streak</span><strong id="streakLabel">0 days</strong></div>
+  </div>
+</header>
+
+<main>
+  <section aria-label="Overview">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">All subjects</p>
+        <h2>Your progress</h2>
+      </div>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </section>
+
+  <nav class="tabs" id="subjectTabs" aria-label="Subjects"></nav>
+
+  <div id="subjectPanels"></div>
+</main>
+
+<script>
+// ---------------- Helpers ----------------
+function byId(id){ return document.getElementById(id); }
+function randomInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function round(v,d){ const f=Math.pow(10,d); return Math.round(v*f)/f; }
+function sinD(d){ return Math.sin(d*Math.PI/180); }
+function cosD(d){ return Math.cos(d*Math.PI/180); }
+function tanD(d){ return Math.tan(d*Math.PI/180); }
+function dateKey(d){ const x=new Date(d); x.setHours(0,0,0,0); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`; }
+function shuffledCopy(arr){ const c=arr.slice(); for(let i=c.length-1;i>0;i--){ const j=randomInt(0,i); [c[i],c[j]]=[c[j],c[i]]; } return c; }
+
+const STORAGE_KEY = "hscTrialStudioState";
+function loadState(){ try{ const raw=localStorage.getItem(STORAGE_KEY); return raw?JSON.parse(raw):{}; }catch(e){ return {}; } }
+function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); }catch(e){} }
+const saved = loadState();
+saved.subjects = saved.subjects || {};
+saved.studyDays = saved.studyDays || {};
+const today = new Date();
+const todayKey = dateKey(today);
+
+function ensureSubjectState(id){
+  if(!saved.subjects[id]) saved.subjects[id] = { testsCompleted: 0 };
+  return saved.subjects[id];
+}
+
+function logStudyToday(){
+  saved.studyDays[todayKey] = true;
+  saveState();
+  setHeaderStats();
+}
+
+function computeStreak(){
+  let streak=0;
+  const cursor=new Date(today); cursor.setHours(0,0,0,0);
+  if(!saved.studyDays[dateKey(cursor)]) cursor.setDate(cursor.getDate()-1);
+  while(saved.studyDays[dateKey(cursor)]){ streak++; cursor.setDate(cursor.getDate()-1); }
+  return streak;
+}
+
+function setHeaderStats(){
+  const examDate = new Date(2026,9,13); // 13 Oct 2026
+  const diffDays = Math.max(0, Math.ceil((examDate - today)/86400000));
+  byId("countdownLabel").textContent = `${diffDays} days`;
+  const streak = computeStreak();
+  byId("streakLabel").textContent = `${streak>0?"\ud83d\udd25 ":""}${streak} day${streak===1?"":"s"}`;
+}
+
+// ---------------- NESA real paper links ----------------
+const NESA_BASE = "https://www.nsw.gov.au/education-and-training/nesa/curriculum/hsc-exam-papers";
+const NESA_BROWSE = "https://www.nsw.gov.au/education-and-training/nesa/curriculum/hsc-exam-resources";
+function realPapersHtml(subject){
+  if(subject.nesaVerified){
+    return `
+      <p class="note">Free, official NESA past HSC papers and marking guidelines (current syllabus, 2020&ndash;2025). These are the real thing &mdash; use them for full 3-hour timed simulations.</p>
+      <div class="paper-links">
+        <a href="${NESA_BASE}/${subject.nesaSlug}" target="_blank" rel="noopener">All ${subject.name} past papers (NESA) \u2192</a>
+      </div>`;
+  }
+  return `
+    <p class="note">NESA's exact page for ${subject.name} moves around a bit &mdash; use this official browse page and filter/search for "${subject.name}" to get free past papers and marking guidelines (current syllabus, 2020&ndash;2025).</p>
+    <div class="paper-links">
+      <a href="${NESA_BROWSE}?category=${subject.nesaCategory}" target="_blank" rel="noopener">Browse ${subject.nesaCategoryLabel} past papers (NESA) \u2192</a>
+    </div>`;
+}
+
+// ---------------- Subject content ----------------
+const SUBJECTS = [];
+
+// ---- Physics (MCQ bank) ----
+SUBJECTS.push({
+  id:"physics", name:"Physics", type:"mcq",
+  nesaSlug:"physics", nesaVerified:true,
+  topics:["Advanced Mechanics","Electromagnetism","Nature of Light","Universe to the Atom"],
+  bank:[
+    {topic:"Advanced Mechanics", q:"For a projectile launched at angle \u03b8 with speed u (no air resistance), which angle gives the maximum range?", options:["30\u00b0","45\u00b0","60\u00b0","90\u00b0"], correct:1, explain:"Range is maximised at 45\u00b0 since range \u221d sin(2\u03b8), which peaks when 2\u03b8 = 90\u00b0."},
+    {topic:"Advanced Mechanics", q:"In uniform circular motion, the centripetal acceleration is directed:", options:["away from the centre","tangent to the path","toward the centre","in the direction of motion"], correct:2, explain:"Centripetal acceleration always points toward the centre of the circle."},
+    {topic:"Advanced Mechanics", q:"Kepler's Third Law states the square of a planet's orbital period is proportional to:", options:["the planet's mass","the cube of the orbital radius","the square of the orbital radius","the planet's velocity"], correct:1, explain:"T\u00b2 \u221d r\u00b3 is Kepler's Third Law."},
+    {topic:"Advanced Mechanics", q:"A satellite in geostationary orbit has a period equal to:", options:["1 hour","24 hours","27 days","365 days"], correct:1, explain:"Geostationary satellites orbit once every 24 hours, matching Earth's rotation."},
+    {topic:"Advanced Mechanics", q:"Escape velocity from a planet depends on:", options:["the mass and radius of the planet only","the mass of the escaping object only","the planet's rotation speed","the object's colour"], correct:0, explain:"Escape velocity v = \u221a(2GM/r) depends only on the planet's mass and radius."},
+    {topic:"Advanced Mechanics", q:"In projectile motion (ignoring air resistance), which velocity component stays constant?", options:["vertical","horizontal","both","neither"], correct:1, explain:"There is no horizontal force acting, so horizontal velocity is constant."},
+    {topic:"Advanced Mechanics", q:"Centripetal force is:", options:["a new fundamental force","the net force causing circular motion","always friction","always gravity"], correct:1, explain:"Centripetal force is simply the label for whatever net force causes circular motion."},
+    {topic:"Advanced Mechanics", q:"As a rocket burns fuel and loses mass during launch, for constant thrust its acceleration:", options:["decreases","stays the same","increases","becomes zero"], correct:2, explain:"a = F/m, so as mass m decreases with constant thrust F, acceleration increases."},
+    {topic:"Electromagnetism", q:"A current-carrying wire in a magnetic field experiences a force given by:", options:["F = qE","F = BIL sin\u03b8","F = ma","F = mv\u00b2/r"], correct:1, explain:"The force on a current-carrying conductor is F = BIL sin\u03b8."},
+    {topic:"Electromagnetism", q:"According to Lenz's Law, an induced current opposes:", options:["the resistance of the circuit","the change in magnetic flux that produced it","the applied EMF's direction","gravity"], correct:1, explain:"Lenz's Law: induced current opposes the change in flux that caused it."},
+    {topic:"Electromagnetism", q:"An ideal transformer that increases voltage must:", options:["increase current proportionally","decrease current proportionally","keep current the same","have no effect on current"], correct:1, explain:"Power is conserved (Vp Ip = Vs Is), so if voltage increases, current decreases."},
+    {topic:"Electromagnetism", q:"The right-hand rule is used to find the direction of:", options:["gravitational force","the magnetic field around a current-carrying wire","the electric field between capacitor plates","radioactive decay"], correct:1, explain:"The right-hand grip rule gives the magnetic field direction around a wire."},
+    {topic:"Electromagnetism", q:"Eddy currents in a metal plate moving through a magnetic field cause:", options:["an increase in speed","a braking (opposing) force","no effect at all","only a temperature rise, no force"], correct:1, explain:"Eddy currents create a force opposing the motion, acting as an electromagnetic brake."},
+    {topic:"Electromagnetism", q:"In an AC generator, EMF is maximum when the coil's plane is:", options:["parallel to the magnetic field lines","perpendicular to the field lines","stationary","irrelevant to orientation"], correct:0, explain:"EMF is maximal when the rate of change of flux is greatest, which occurs when the coil plane is parallel to B."},
+    {topic:"Electromagnetism", q:"A split-ring commutator in a DC motor:", options:["increases the voltage","reverses current direction each half rotation to keep torque one-directional","acts as a fuse","stores charge"], correct:1, explain:"The commutator reverses current every half turn so the torque keeps rotating the coil the same way."},
+    {topic:"Electromagnetism", q:"Magnetic flux through a loop depends on:", options:["only the magnetic field strength","field strength, loop area, and the angle between them","only the loop's resistance","only the current in the loop"], correct:1, explain:"\u03a6 = B\u00b7A\u00b7cos\u03b8, so flux depends on field strength, area, and angle."},
+    {topic:"Nature of Light", q:"Which experiment provided strong evidence for the wave nature of light?", options:["Photoelectric effect","Young's double slit experiment","Rutherford scattering","Millikan oil drop"], correct:1, explain:"Young's double slit produced an interference pattern, a wave phenomenon."},
+    {topic:"Nature of Light", q:"The photoelectric effect provided evidence that light:", options:["is purely a wave","can behave as discrete packets of energy (photons)","has no energy","travels slower in a vacuum"], correct:1, explain:"The photoelectric effect can only be explained if light delivers energy in discrete photon packets."},
+    {topic:"Nature of Light", q:"Einstein's photoelectric equation is:", options:["E = mc\u00b2","E = hf = KEmax + W\u2080","F = ma","E = mgh"], correct:1, explain:"E = hf = KEmax + W\u2080 relates photon energy to kinetic energy and work function."},
+    {topic:"Nature of Light", q:"As an object's speed approaches the speed of light, special relativity predicts its energy:", options:["decreases toward zero","approaches infinity","stays constant","becomes negative"], correct:1, explain:"Relativistic energy increases without bound as v approaches c."},
+    {topic:"Nature of Light", q:"Time dilation predicts that a moving clock, observed from a stationary frame, runs:", options:["faster","slower","at the same rate","backwards"], correct:1, explain:"Moving clocks are observed to run slower relative to a stationary observer."},
+    {topic:"Nature of Light", q:"The Michelson-Morley experiment failed to detect the:", options:["speed of light","luminiferous ether","electron","photon"], correct:1, explain:"It found no evidence of the ether, supporting the idea light needs no medium."},
+    {topic:"Nature of Light", q:"Which is NOT a postulate of special relativity?", options:["laws of physics are the same in all inertial frames","the speed of light in a vacuum is constant for all observers","absolute time exists for all observers","simultaneity is relative"], correct:2, explain:"Special relativity rejects absolute time; time is relative to the observer's frame."},
+    {topic:"Nature of Light", q:"Diffraction is most noticeable when aperture/obstacle size is:", options:["much larger than the wavelength","similar in size to the wavelength","irrelevant to wavelength","exactly zero"], correct:1, explain:"Diffraction effects are strongest when the obstacle is comparable in size to the wavelength."},
+    {topic:"Universe to the Atom", q:"Rutherford's gold foil experiment led to the discovery of:", options:["the electron","a small, dense, positively charged nucleus","the neutron","quarks"], correct:1, explain:"Alpha particle deflections revealed a small, dense, positive nucleus."},
+    {topic:"Universe to the Atom", q:"In the Bohr model, electrons can only occupy orbits with:", options:["any radius","quantised (discrete) energy levels","zero energy","continuous energy"], correct:1, explain:"Bohr proposed electrons occupy only certain discrete, quantised energy levels."},
+    {topic:"Universe to the Atom", q:"Nuclear fusion, as occurs in the Sun, involves:", options:["splitting heavy nuclei","combining light nuclei into a heavier nucleus","releasing electrons only","absorbing photons only"], correct:1, explain:"Fusion combines light nuclei (e.g. hydrogen) into heavier nuclei, releasing energy."},
+    {topic:"Universe to the Atom", q:"The strong nuclear force:", options:["acts over very large astronomical distances","acts over very short distances, holding the nucleus together","repels protons and neutrons","is weaker than gravity at all distances"], correct:1, explain:"The strong force operates over short (femtometre) ranges and binds the nucleus."},
+    {topic:"Universe to the Atom", q:"Which particle is NOT considered fundamental in the Standard Model?", options:["quark","electron","proton","photon"], correct:2, explain:"A proton is made of quarks, so it is not fundamental."},
+    {topic:"Universe to the Atom", q:"Hertzsprung-Russell diagrams plot a star's:", options:["mass vs radius","luminosity vs surface temperature","age vs colour only","distance vs brightness only"], correct:1, explain:"HR diagrams plot luminosity against surface temperature (or spectral class)."},
+    {topic:"Universe to the Atom", q:"A main-sequence star like the Sun is primarily powered by:", options:["nuclear fission","hydrogen fusion into helium","chemical burning","gravitational contraction only"], correct:1, explain:"Main-sequence stars fuse hydrogen into helium in their cores."},
+    {topic:"Universe to the Atom", q:"The half-life of a radioactive isotope is the time for:", options:["all of the sample to decay","half of the sample to decay","the sample to double","the sample to stop decaying"], correct:1, explain:"Half-life is defined as the time for half the radioactive nuclei to decay."}
+  ],
+  numeric:[
+    {topic:"Advanced Mechanics", prompt:"A ball is thrown horizontally at 15 m/s from a 20 m high cliff. Using g = 10 m/s\u00b2, how long does it take to hit the ground (s)?", answer:2, help:"t = \u221a(2h/g) = \u221a(40/10)."},
+    {topic:"Advanced Mechanics", prompt:"A car travels in a circle of radius 50 m at constant speed 20 m/s. Find the centripetal acceleration (m/s\u00b2).", answer:8, help:"a = v\u00b2/r = 400/50."},
+    {topic:"Electromagnetism", prompt:"A 0.5 m wire carries 4 A in a 0.2 T field, perpendicular to the field. Find the force on the wire (N).", answer:0.4, help:"F = BIL = 0.2 \u00d7 4 \u00d7 0.5."},
+    {topic:"Electromagnetism", prompt:"A transformer has 100 primary turns and 400 secondary turns. If Vp = 20 V, find Vs (V) for an ideal transformer.", answer:80, help:"Vs = Vp \u00d7 (Ns/Np) = 20 \u00d7 4."},
+    {topic:"Nature of Light", prompt:"Find the energy (in eV, 2 d.p.) of a photon with frequency 5\u00d710\u00b9\u2074 Hz. Use h = 4.14\u00d710\u207b\u00b9\u2075 eV\u00b7s.", answer:2.07, help:"E = hf."},
+    {topic:"Nature of Light", prompt:"Light has wavelength 600 nm. Using c = 3\u00d710\u2078 m/s, find the frequency in units of 10\u00b9\u2074 Hz (e.g. 5 means 5\u00d710\u00b9\u2074 Hz), 2 d.p.", answer:5, help:"f = c/\u03bb."},
+    {topic:"Universe to the Atom", prompt:"A sample has a half-life of 8 days. Starting with 80 g, how many grams remain after 24 days?", answer:10, help:"24 days = 3 half-lives, so 80/2\u00b3."},
+    {topic:"Universe to the Atom", prompt:"A fission reaction releases 200 MeV per event. How much energy (MeV) is released by 5 events?", answer:1000, help:"200 \u00d7 5."}
+  ],
+  nesaCategory:"Science", nesaCategoryLabel:"Science"
+});
+
+// ---- Biology (MCQ bank) ----
+SUBJECTS.push({
+  id:"biology", name:"Biology", type:"mcq",
+  nesaSlug:"biology", nesaVerified:true,
+  topics:["Heredity","Genetic Change","Infectious Disease","Non-Infectious Disease"],
+  bank:[
+    {topic:"Heredity", q:"DNA replication is 'semi-conservative' because:", options:["both new strands are entirely new nucleotides","each new DNA molecule has one original and one new strand","DNA is destroyed during replication","only RNA is conserved"], correct:1, explain:"Each daughter molecule keeps one original (parent) strand and gains one new strand."},
+    {topic:"Heredity", q:"A person with genotype Aa is described as:", options:["homozygous dominant","homozygous recessive","heterozygous","hemizygous"], correct:2, explain:"Two different alleles at a locus (Aa) is the definition of heterozygous."},
+    {topic:"Heredity", q:"Which is an example of codominance?", options:["AB blood type, where both A and B antigens are expressed","brown eyes dominant over blue","Mendel's pea plant height","sex-linked colour blindness"], correct:0, explain:"In AB blood type, both A and B alleles are fully and simultaneously expressed."},
+    {topic:"Heredity", q:"Meiosis results in the production of:", options:["two genetically identical diploid cells","four genetically different haploid cells","one diploid cell","four identical diploid cells"], correct:1, explain:"Meiosis produces four haploid gametes, each genetically distinct due to crossing over and independent assortment."},
+    {topic:"Heredity", q:"A mutation changing a single nucleotide base is called a:", options:["chromosomal mutation","point mutation","frameshift only","polyploidy"], correct:1, explain:"A single base change is a point mutation."},
+    {topic:"Heredity", q:"Non-disjunction during meiosis can result in a condition such as:", options:["Down syndrome (trisomy 21)","sickle cell anaemia","cystic fibrosis","haemophilia"], correct:0, explain:"Down syndrome results from non-disjunction leading to an extra copy of chromosome 21."},
+    {topic:"Heredity", q:"In a dihybrid cross (AaBb \u00d7 AaBb), the expected phenotypic ratio is:", options:["3:1","1:2:1","9:3:3:1","1:1:1:1"], correct:2, explain:"Independent assortment of two gene pairs gives the classic 9:3:3:1 ratio."},
+    {topic:"Heredity", q:"Epigenetic changes affect gene expression by:", options:["altering the DNA sequence itself","modifying gene expression without changing the DNA sequence","deleting whole chromosomes","only occurring in bacteria"], correct:1, explain:"Epigenetics involves reversible changes (e.g. methylation) that regulate expression, not the sequence itself."},
+    {topic:"Genetic Change", q:"Gene-editing technologies such as CRISPR are used to:", options:["read a person's ancestry only","edit specific sequences of DNA","only clone whole organisms","measure blood pressure"], correct:1, explain:"CRISPR allows targeted editing of specific DNA sequences."},
+    {topic:"Genetic Change", q:"Selective breeding relies on:", options:["random mutation only","choosing organisms with desirable traits to breed","genetic engineering only","cloning only"], correct:1, explain:"Selective breeding is choosing parents with desired traits over generations."},
+    {topic:"Genetic Change", q:"A genetically modified organism (GMO) has had its genome altered by:", options:["natural selection only","direct insertion or editing of genes via biotechnology","selective breeding only","radiation exposure only"], correct:1, explain:"GMOs are created via deliberate biotechnological gene insertion/editing."},
+    {topic:"Genetic Change", q:"Polyploidy refers to:", options:["having one set of chromosomes","having extra complete sets of chromosomes","having no chromosomes","having damaged mitochondria"], correct:1, explain:"Polyploid organisms have more than two complete chromosome sets."},
+    {topic:"Genetic Change", q:"Gel electrophoresis separates DNA fragments based on:", options:["colour","size and charge as they move through a gel in an electric field","taste","temperature"], correct:1, explain:"Smaller fragments move further/faster through the gel under an electric field."},
+    {topic:"Genetic Change", q:"The Human Genome Project's main achievement was to:", options:["clone the first human","map and sequence all human genes","cure all genetic diseases","invent CRISPR"], correct:1, explain:"It produced a complete map/sequence of the human genome."},
+    {topic:"Genetic Change", q:"Genetic drift is:", options:["a directed, non-random change in allele frequency","a random change in allele frequency, more pronounced in small populations","the same process as natural selection","only found in bacteria"], correct:1, explain:"Genetic drift is random and has a larger effect in smaller populations."},
+    {topic:"Genetic Change", q:"Recombinant DNA technology typically involves:", options:["combining DNA from different sources using restriction enzymes and ligase","destroying DNA with heat","only occurring in viruses","removing all genes from a cell"], correct:0, explain:"Restriction enzymes cut DNA, and ligase joins fragments from different sources."},
+    {topic:"Infectious Disease", q:"Pathogens can be transmitted directly through:", options:["only air","physical contact, body fluids, or airborne droplets","only contaminated water","only insect bites"], correct:1, explain:"Direct transmission includes contact, fluids, and droplets between hosts."},
+    {topic:"Infectious Disease", q:"Vaccines work by:", options:["directly killing the pathogen in the body","stimulating the immune system to produce memory cells against a specific antigen","providing antibiotics","curing symptoms only"], correct:1, explain:"Vaccines trigger an immune response, producing memory cells for future protection."},
+    {topic:"Infectious Disease", q:"Antibiotic resistance mainly develops due to:", options:["vaccination","overuse/misuse of antibiotics selecting for resistant strains","cold weather","viral mutation"], correct:1, explain:"Overuse of antibiotics selects for bacteria that survive, spreading resistance."},
+    {topic:"Infectious Disease", q:"The immune response involving antibodies from B cells is called:", options:["cell-mediated immunity","humoral (antibody-mediated) immunity","innate immunity only","passive immunity only"], correct:1, explain:"Humoral immunity refers to antibody production by B cells."},
+    {topic:"Infectious Disease", q:"A zoonotic disease is one that:", options:["only affects plants","is transmitted from animals to humans","cannot be transmitted at all","is always caused by fungi"], correct:1, explain:"Zoonotic diseases pass from animals to humans."},
+    {topic:"Infectious Disease", q:"Which is a physical (first-line) defence against pathogens?", options:["antibodies","skin and mucous membranes","white blood cells","memory cells"], correct:1, explain:"Skin and mucous membranes are physical barriers, the first line of defence."},
+    {topic:"Infectious Disease", q:"Epidemiology is the study of:", options:["virus structure only","the pattern, causes and effects of disease in populations","plant genetics","cell division"], correct:1, explain:"Epidemiology studies disease patterns and causes across populations."},
+    {topic:"Infectious Disease", q:"Herd immunity occurs when:", options:["every single individual is vaccinated with no exceptions","enough of a population is immune to limit spread, protecting the vulnerable","only animals are immune","antibiotics are used population-wide"], correct:1, explain:"Herd immunity limits transmission once enough of the population is immune."},
+    {topic:"Non-Infectious Disease", q:"A non-infectious disease is one that:", options:["is caused by a pathogen and is contagious","is not caused by a pathogen and is not contagious","only affects the elderly","is always genetic"], correct:1, explain:"Non-infectious diseases are not caused by pathogens and don't spread person-to-person."},
+    {topic:"Non-Infectious Disease", q:"Homeostasis refers to the body's ability to:", options:["fight off infection","maintain a stable internal environment despite external change","grow rapidly","reproduce"], correct:1, explain:"Homeostasis is maintaining stable internal conditions."},
+    {topic:"Non-Infectious Disease", q:"Type 1 diabetes is caused by:", options:["lifestyle factors alone","the immune system destroying insulin-producing beta cells","a contagious viral infection","eating too much sugar as a child, exclusively"], correct:1, explain:"Type 1 diabetes is autoimmune destruction of pancreatic beta cells."},
+    {topic:"Non-Infectious Disease", q:"Epidemiological studies of non-infectious disease often look for correlations with:", options:["contagion routes only","lifestyle, environmental and genetic risk factors","vaccination schedules only","pathogen mutation rates"], correct:1, explain:"Non-infectious disease risk is studied via lifestyle, environment and genetics."},
+    {topic:"Non-Infectious Disease", q:"Negative feedback loops in the body work to:", options:["amplify a change further from the set point","return a variable back toward its normal set point","have no effect on regulation","only operate during illness"], correct:1, explain:"Negative feedback counteracts change, restoring the set point."},
+    {topic:"Non-Infectious Disease", q:"Which is classified as a non-infectious disease?", options:["influenza","type 2 diabetes","measles","tuberculosis"], correct:1, explain:"Type 2 diabetes is not caused by a pathogen, so it's non-infectious."},
+    {topic:"Non-Infectious Disease", q:"Technologies used to detect non-infectious diseases include:", options:["only physical examination","imaging (MRI, CT), blood tests and genetic screening","only surveys","none - they cannot be detected early"], correct:1, explain:"Imaging, blood tests and genetic screening are key detection technologies."},
+    {topic:"Non-Infectious Disease", q:"Multifactorial diseases (e.g. heart disease) are caused by:", options:["a single gene only","a single environmental factor only","a combination of genetic and environmental factors","random chance only"], correct:2, explain:"Multifactorial diseases arise from combined genetic and environmental influences."}
+  ],
+  numeric:[],
+  nesaCategory:"Science", nesaCategoryLabel:"Science"
+});
+
+// ---- Maths Advanced (numeric bank) ----
+SUBJECTS.push({
+  id:"mathsAdv", name:"Mathematics Advanced", type:"numeric",
+  nesaSlug:"mathematics-advanced", nesaVerified:false,
+  nesaCategory:"Mathematics", nesaCategoryLabel:"Mathematics",
+  topics:["Functions","Trigonometry","Calculus","Financial Maths","Statistics"],
+  bank:[
+    {topic:"Functions", prompt:"If f(x) = 2x\u00b2 - 3x + 1, find f(3).", answer:10, help:"Substitute x = 3."},
+    {topic:"Functions", prompt:"Find the sum of the roots of x\u00b2 - 5x + 6 = 0 (use -b/a).", answer:5, help:"Sum of roots = -b/a."},
+    {topic:"Functions", prompt:"Find the gradient of the line joining (2,3) and (6,11).", answer:2, help:"Gradient = (y\u2082-y\u2081)/(x\u2082-x\u2081)."},
+    {topic:"Functions", prompt:"Find the x-coordinate of the midpoint of (2,3) and (8,9).", answer:5, help:"Midpoint x = (x\u2081+x\u2082)/2."},
+    {topic:"Functions", prompt:"Solve for x: log\u2082(x) = 5", answer:32, help:"x = 2\u2075."},
+    {topic:"Functions", prompt:"If f(x) = 3x - 4, find x such that f(x) = 11.", answer:5, help:"Solve 3x - 4 = 11."},
+    {topic:"Functions", prompt:"Solve for x: 2\u02e3 = 32", answer:5, help:"32 = 2\u2075."},
+    {topic:"Functions", prompt:"Find the y-intercept of f(x) = 4x\u00b2 - 3x + 7.", answer:7, help:"y-intercept is f(0)."},
+    {topic:"Trigonometry", prompt:"Find sin(30\u00b0).", answer:0.5, help:"Standard exact value."},
+    {topic:"Trigonometry", prompt:"Find cos(60\u00b0).", answer:0.5, help:"Standard exact value."},
+    {topic:"Trigonometry", prompt:"Solve for \u03b8 (0\u2264\u03b8\u226490\u00b0): sin\u03b8 = 1", answer:90, help:"sin is maximum at 90\u00b0."},
+    {topic:"Trigonometry", prompt:"In a right triangle, opposite = 6, hypotenuse = 10. Find sin\u03b8 as a decimal.", answer:0.6, help:"sin\u03b8 = opposite/hypotenuse."},
+    {topic:"Trigonometry", prompt:"Find tan(45\u00b0).", answer:1, help:"Standard exact value."},
+    {topic:"Trigonometry", prompt:"Convert 180\u00b0 to radians, as a multiple of \u03c0 (e.g. answer 1 means \u03c0).", answer:1, help:"180\u00b0 = \u03c0 radians."},
+    {topic:"Trigonometry", prompt:"Find the exact value of cos(0\u00b0).", answer:1, help:"cos(0\u00b0) = 1."},
+    {topic:"Trigonometry", prompt:"A triangle has angle 40\u00b0 and adjacent side 12 cm. Find the opposite side (tan), 1 d.p.", answer:round(12*tanD(40),1), help:"opposite = adjacent \u00d7 tan(angle)."},
+    {topic:"Calculus", prompt:"Differentiate f(x) = x\u00b3, find f'(2).", answer:12, help:"f'(x) = 3x\u00b2."},
+    {topic:"Calculus", prompt:"Differentiate f(x) = 5x\u00b2 - 3x, find f'(1).", answer:7, help:"f'(x) = 10x - 3."},
+    {topic:"Calculus", prompt:"Find the gradient of the tangent to y = x\u00b2 at x = 4.", answer:8, help:"dy/dx = 2x."},
+    {topic:"Calculus", prompt:"Differentiate f(x) = x\u2074, find f'(1).", answer:4, help:"f'(x) = 4x\u00b3."},
+    {topic:"Calculus", prompt:"If f(x) = 2x\u00b3 + x, find f'(0).", answer:1, help:"f'(x) = 6x\u00b2 + 1."},
+    {topic:"Calculus", prompt:"Find f'(5) if f(x) = 7 (a constant function).", answer:0, help:"The derivative of a constant is always 0."},
+    {topic:"Calculus", prompt:"Differentiate f(x) = (3x+1)\u00b2 and evaluate f'(0).", answer:6, help:"Expand to 9x\u00b2+6x+1, so f'(x)=18x+6."},
+    {topic:"Calculus", prompt:"Find the second derivative of f(x) = x\u00b3 at x = 2 (f''(2)).", answer:12, help:"f'(x)=3x\u00b2, f''(x)=6x."},
+    {topic:"Financial Maths", prompt:"You invest $1000 at 5% p.a. simple interest for 3 years. Find the total interest earned ($).", answer:150, help:"I = Prt."},
+    {topic:"Financial Maths", prompt:"Find the future value of $2000 at 4% p.a. compound interest for 2 years (nearest dollar).", answer:2163, help:"FV = P(1+r)\u207f."},
+    {topic:"Financial Maths", prompt:"A $5000 loan is charged 6% p.a. simple interest over 2 years. Find the total repayment ($).", answer:5600, help:"Total = P + Prt."},
+    {topic:"Financial Maths", prompt:"An item is discounted 20% from $250. Find the sale price ($).", answer:200, help:"Sale price = 250 \u00d7 0.8."},
+    {topic:"Financial Maths", prompt:"You save $100 per month for a year (no interest). Find the total saved ($).", answer:1200, help:"100 \u00d7 12."},
+    {topic:"Financial Maths", prompt:"A $30000 car depreciates at 10% p.a. reducing balance. Find its value after 1 year ($).", answer:27000, help:"30000 \u00d7 0.9."},
+    {topic:"Financial Maths", prompt:"Find the simple interest on $1500 at 3.5% p.a. for 4 years ($).", answer:210, help:"I = Prt."},
+    {topic:"Financial Maths", prompt:"An investment grows from $2000 to $2500 over 2 years using simple interest. Find the annual rate (%).", answer:12.5, help:"Interest = 500 over 2 years, then r = I/(Pt) \u00d7 100."},
+    {topic:"Statistics", prompt:"Find the mean of: 4, 8, 6, 10, 2.", answer:6, help:"Sum divided by count."},
+    {topic:"Statistics", prompt:"Find the median of: 3, 7, 9, 2, 5.", answer:5, help:"Sort then find the middle value."},
+    {topic:"Statistics", prompt:"Find the range of: 12, 4, 9, 15, 7.", answer:11, help:"Max - min."},
+    {topic:"Statistics", prompt:"A data set has mean 20 and standard deviation 4. Find the z-score for a value of 28.", answer:2, help:"z = (x-\u03bc)/\u03c3."},
+    {topic:"Statistics", prompt:"Find the mode of: 2, 3, 3, 5, 7, 3, 8.", answer:3, help:"Most frequent value."},
+    {topic:"Statistics", prompt:"In a normal distribution, about what % of data lies within 1 standard deviation of the mean?", answer:68, help:"The empirical rule: ~68% within 1 SD."},
+    {topic:"Statistics", prompt:"Find the mean of: 10, 20, 30, 40.", answer:25, help:"Sum divided by count."},
+    {topic:"Statistics", prompt:"A test has mean 65 and SD 10. A student's z-score was 1.5. Find their raw score.", answer:80, help:"x = \u03bc + z\u03c3."}
+  ]
+});
+
+// ---- Maths Extension 1 (numeric bank) ----
+SUBJECTS.push({
+  id:"mathsExt1", name:"Mathematics Extension 1", type:"numeric",
+  nesaSlug:"mathematics-extension-1", nesaVerified:true,
+  nesaCategory:"Mathematics", nesaCategoryLabel:"Mathematics",
+  topics:["Combinatorics","Further Trigonometry","Further Calculus","Polynomials & Rates"],
+  bank:[
+    {topic:"Combinatorics", prompt:"How many ways can 5 different books be arranged on a shelf?", answer:120, help:"5! = 120."},
+    {topic:"Combinatorics", prompt:"How many ways can you choose 3 people from a group of 8 (combinations)?", answer:56, help:"\u2078C\u2083 = 56."},
+    {topic:"Combinatorics", prompt:"How many 4-letter arrangements can be made from MATH (no repeats)?", answer:24, help:"4! = 24."},
+    {topic:"Combinatorics", prompt:"In how many ways can a committee of 4 be chosen from 10 people?", answer:210, help:"\u00b9\u2070C\u2084 = 210."},
+    {topic:"Combinatorics", prompt:"3 girls and 2 boys sit in a row, boys must sit together (as a block). How many arrangements?", answer:48, help:"Treat boys as 1 block: 4! \u00d7 2! = 48."},
+    {topic:"Combinatorics", prompt:"How many distinct permutations of the letters in LEVEL (L,E each repeat twice)?", answer:30, help:"5!/(2!\u00d72!) = 30."},
+    {topic:"Combinatorics", prompt:"How many ways can you select 2 items from 6 distinct items (order doesn't matter)?", answer:15, help:"\u2076C\u2082 = 15."},
+    {topic:"Combinatorics", prompt:"Find the number of ways to arrange 6 people in a circle.", answer:120, help:"Circular permutations = (n-1)! = 5!."},
+    {topic:"Further Trigonometry", prompt:"Solve for x (0\u2264x\u2264360\u00b0): cos x = 0. Give the smallest positive solution.", answer:90, help:"cos is zero at 90\u00b0 and 270\u00b0."},
+    {topic:"Further Trigonometry", prompt:"If sin\u03b8 = 0.6, find cos\u03b8 (positive value, 1 d.p.) using sin\u00b2\u03b8+cos\u00b2\u03b8=1.", answer:0.8, help:"cos\u03b8 = \u221a(1-0.36) = 0.8."},
+    {topic:"Further Trigonometry", prompt:"Solve tan\u03b8 = 1 for 0\u2264\u03b8\u226490\u00b0.", answer:45, help:"tan(45\u00b0) = 1."},
+    {topic:"Further Trigonometry", prompt:"Evaluate sin(90\u00b0-30\u00b0) using the identity sin(90-\u03b8)=cos\u03b8, to 2 d.p.", answer:round(cosD(30),2), help:"sin(90-\u03b8) = cos\u03b8, and cos(30\u00b0) \u2248 0.87."},
+    {topic:"Further Trigonometry", prompt:"Solve 2sin\u03b8 = 1 for 0\u2264\u03b8\u226490\u00b0.", answer:30, help:"sin\u03b8 = 0.5, so \u03b8 = 30\u00b0."},
+    {topic:"Further Trigonometry", prompt:"Find the period, in degrees, of y = sin(2\u03b8).", answer:180, help:"Period = 360/2."},
+    {topic:"Further Trigonometry", prompt:"Find the amplitude of y = 3cos(\u03b8).", answer:3, help:"Amplitude is the coefficient in front."},
+    {topic:"Further Trigonometry", prompt:"Using cos\u00b2\u03b8-sin\u00b2\u03b8=cos(2\u03b8), evaluate cos(2\u00d760\u00b0), 2 d.p.", answer:round(cosD(120),2), help:"cos(120\u00b0) = -0.5."},
+    {topic:"Further Calculus", prompt:"Differentiate f(x) = sin(x), find f'(0).", answer:1, help:"f'(x) = cos(x), cos(0)=1."},
+    {topic:"Further Calculus", prompt:"Differentiate f(x) = e\u02e3, find f'(0).", answer:1, help:"The derivative of e\u02e3 is itself; e\u2070=1."},
+    {topic:"Further Calculus", prompt:"Differentiate f(x) = ln(x), find f'(1).", answer:1, help:"f'(x) = 1/x, f'(1)=1."},
+    {topic:"Further Calculus", prompt:"If f(x) = cos(x), find f'(\u03c0/2) (should be a clean integer).", answer:-1, help:"f'(x) = -sin(x), -sin(90\u00b0) = -1."},
+    {topic:"Further Calculus", prompt:"Using the product rule, differentiate f(x) = x\u00b7e\u02e3 and evaluate f'(0).", answer:1, help:"f'(x) = e\u02e3 + xe\u02e3, f'(0) = 1."},
+    {topic:"Further Calculus", prompt:"Find dy/dx for y = x\u00b2sin(x) at x = 0.", answer:0, help:"dy/dx = 2x sinx + x\u00b2cosx; both terms are 0 at x=0."},
+    {topic:"Further Calculus", prompt:"Evaluate \u222b\u2080\u00b3 2x dx.", answer:9, help:"Antiderivative x\u00b2, evaluated from 0 to 3."},
+    {topic:"Further Calculus", prompt:"Evaluate \u222b\u2080\u00b2 3 dx.", answer:6, help:"Antiderivative 3x, evaluated from 0 to 2."},
+    {topic:"Polynomials & Rates", prompt:"P(x)=x\u00b3-6x\u00b2+11x-6 has roots 1,2,3. Find the sum of the roots.", answer:6, help:"Sum of roots = -(-6)/1 = 6, matching 1+2+3."},
+    {topic:"Polynomials & Rates", prompt:"For P(x)=x\u00b2-5x+6, find the product of the roots.", answer:6, help:"Product of roots = c/a."},
+    {topic:"Polynomials & Rates", prompt:"V=(4/3)\u03c0r\u00b3. Find dV/dr at r=3 using \u03c0=3.14, 1 d.p. (dV/dr=4\u03c0r\u00b2)", answer:113.0, help:"4 \u00d7 3.14 \u00d7 9 = 113.04."},
+    {topic:"Polynomials & Rates", prompt:"A particle has displacement x(t)=t\u00b3-3t. Find the velocity at t=2.", answer:9, help:"v(t)=3t\u00b2-3, v(2)=9."},
+    {topic:"Polynomials & Rates", prompt:"For P(x)=x\u00b3-6x\u00b2+11x-6, find P(1) (should confirm 1 is a root).", answer:0, help:"Substitute x=1."},
+    {topic:"Polynomials & Rates", prompt:"A tank's volume changes at dV/dt=6t. Find the total change in volume from t=0 to t=4.", answer:48, help:"\u222b\u2080\u2074 6t dt = 3t\u00b2 from 0 to 4."},
+    {topic:"Polynomials & Rates", prompt:"Find the acceleration of x(t)=t\u00b3-3t at t=1 (second derivative).", answer:6, help:"x''(t)=6t, x''(1)=6."},
+    {topic:"Polynomials & Rates", prompt:"A polynomial has roots -1, 2, 3: P(x)=(x+1)(x-2)(x-3). Find P(0).", answer:6, help:"P(0)=(1)(-2)(-3)=6."}
+  ]
+});
+
+// ---- English Standard (essay bank) ----
+SUBJECTS.push({
+  id:"english", name:"English Standard", type:"essay",
+  nesaSlug:"english-standard", nesaVerified:false,
+  nesaCategory:"English", nesaCategoryLabel:"English",
+  topics:["Paper 1: Texts & Human Experiences","Module A","Module B","Module C"],
+  checklist:[
+    "Directly answers the question and its key verb (analyse / evaluate / discuss)",
+    "References 2-3+ specific techniques with textual evidence (quotes/examples)",
+    "Has a clear thesis/argument sustained throughout",
+    "Topic sentences and conclusion link back to the question",
+    "Language is precise, varied, and free of repetition"
+  ],
+  band6:"Band 6 responses are sustained, coherent and sophisticated, with skilful control of language, insightful analysis of how meaning is shaped, and effective integration of evidence.",
+  bank:[
+    {topic:"Paper 1", prompt:"Analyse how a composer of your choice represents the complexity of human experiences in a prescribed text you have studied."},
+    {topic:"Paper 1", prompt:"'Individuals are shaped as much by their setbacks as by their successes.' Discuss with reference to your prescribed text."},
+    {topic:"Paper 1", prompt:"How does your prescribed text explore the tension between individual identity and belonging to a group?"},
+    {topic:"Paper 1", prompt:"Analyse an unseen poem (choose any short poem) and explain how form and language shape the composer's message."},
+    {topic:"Paper 1", prompt:"Explain how an unseen prose extract uses characterisation to explore human experience."},
+    {topic:"Paper 1", prompt:"Write a discursive piece exploring an aspect of the human experience that has shaped who you are."},
+    {topic:"Paper 1", prompt:"Craft an imaginative piece inspired by the theme of 'connection', using at least two distinct narrative techniques."},
+    {topic:"Paper 1", prompt:"'Memory is unreliable, yet it defines who we are.' Write a persuasive piece responding to this statement."},
+    {topic:"Paper 1", prompt:"Write an imaginative piece that begins: 'The letter had been sitting unopened for eleven years.'"},
+    {topic:"Paper 1", prompt:"'Human experiences are best understood through story.' To what extent does your prescribed text support this view?"},
+    {topic:"Module A", prompt:"Compare how your Module A pair of texts represent similar ideas through different textual forms and contexts."},
+    {topic:"Module A", prompt:"'Texts in conversation reveal as much about their differences as their similarities.' Evaluate this for your Module A texts."},
+    {topic:"Module A", prompt:"How does your Module A text pair challenge or reinforce audience expectations of genre?"},
+    {topic:"Module B", prompt:"In your Module B text, how does the composer use language forms and features to shape meaning and provoke response?"},
+    {topic:"Module B", prompt:"To what extent does your Module B text remain relevant to a contemporary audience? Support with textual evidence."},
+    {topic:"Module B", prompt:"'Great texts endure because they ask universal questions.' Evaluate this statement in relation to your Module B text."},
+    {topic:"Module C", prompt:"Write a reflection statement on a piece of your own creative writing, explaining your stylistic choices and their intended effect."},
+    {topic:"Module C", prompt:"'Belonging is found, not given.' To what extent does this align with your prescribed text?"},
+    {topic:"Module C", prompt:"Discuss how your prescribed text uses setting to reflect a character's internal journey."},
+    {topic:"Module C", prompt:"Compare the representation of conflict in two texts you have studied this year (any modules)."}
+  ]
+});
+
+// ---- Studies of Religion I (essay bank) ----
+SUBJECTS.push({
+  id:"religion", name:"Studies of Religion I", type:"essay",
+  nesaSlug:"studies-of-religion-1", nesaVerified:false,
+  nesaCategory:"HSIE", nesaCategoryLabel:"HSIE",
+  topics:["Nature of Religion","Religious Tradition Depth Study","Electives"],
+  checklist:[
+    "Uses correct religious terminology throughout",
+    "References specific beliefs/practices/sources accurately",
+    "Directly addresses the command verb (explain / outline / discuss / analyse)",
+    "Has a clear structure: intro, evidence-based body, conclusion",
+    "Links back to the relevant syllabus dot point"
+  ],
+  band6:"Band 6 responses demonstrate extensive knowledge of the syllabus content, use religious terminology accurately and fluently, and provide well-structured, evidence-based responses to the question asked.",
+  bank:[
+    {topic:"Nature of Religion", prompt:"Explain the significance of sacred texts in shaping the beliefs and practices of a religious tradition you have studied."},
+    {topic:"Nature of Religion", prompt:"Outline the core ethical teachings of a religious tradition and explain how they guide adherents' everyday choices."},
+    {topic:"Nature of Religion", prompt:"Explain the role of ritual and ceremony in expressing and reinforcing religious belief."},
+    {topic:"Nature of Religion", prompt:"Outline how religious traditions respond to issues of bioethics (e.g. the sanctity of life)."},
+    {topic:"Nature of Religion", prompt:"Explain how core ethical teachings apply to environmental responsibility."},
+    {topic:"Nature of Religion", prompt:"Discuss the relationship between religious belief and moral decision-making."},
+    {topic:"Religious Tradition", prompt:"Describe the significant beliefs of your studied religious tradition and explain their importance to adherents."},
+    {topic:"Religious Tradition", prompt:"Outline the origins and history of your studied religious tradition up to the present day."},
+    {topic:"Religious Tradition", prompt:"Explain how a significant person or school of thought has influenced the development of your studied tradition."},
+    {topic:"Religious Tradition", prompt:"Analyse the ways adherents of your studied tradition express their faith through worship and observance."},
+    {topic:"Religious Tradition", prompt:"Explain the significance of a specific ritual or rite of passage in your studied tradition."},
+    {topic:"Religious Tradition", prompt:"Explain how sacred writings are used and interpreted within worship or personal devotion."},
+    {topic:"Religious Tradition", prompt:"Outline key beliefs about life after death within your studied tradition."},
+    {topic:"Religious Tradition", prompt:"Outline the significance of a sacred site or symbol within your studied tradition."},
+    {topic:"Religious Tradition", prompt:"Explain the ways your studied tradition contributes to identity and belonging for its adherents."},
+    {topic:"Electives", prompt:"Explain the significance of ethical teachings on relationships (e.g. family, marriage) within your studied tradition."},
+    {topic:"Electives", prompt:"Discuss the role of religion in promoting principles of justice, peace and reconciliation."},
+    {topic:"Electives", prompt:"Describe the role of significant practices in the everyday lives of adherents."},
+    {topic:"Electives", prompt:"Explain how religious traditions address contemporary ethical issues such as poverty or inequality."},
+    {topic:"Electives", prompt:"Explain how your studied tradition's teachings on peace apply to a real-world conflict or issue."}
+  ]
+});
+
+// ---------------- Queues for random, non-repeating draws ----------------
+const queues = {}; // key: subjectId+':'+bankName -> shuffled array
+function nextFromBank(subjectId, bankName, bank){
+  const key = subjectId + ":" + bankName;
+  if(!queues[key] || queues[key].length === 0){
+    queues[key] = shuffledCopy(bank);
+  }
+  return queues[key].pop();
+}
+
+// ---------------- Rendering: overview ----------------
+function renderOverview(){
+  byId("overviewGrid").innerHTML = SUBJECTS.map(s => {
+    const st = ensureSubjectState(s.id);
+    const count = st.testsCompleted % 20;
+    const pct = Math.round((count/20)*100);
+    return `
+      <button class="subject-tile" data-goto="${s.id}" type="button">
+        <div class="tile-top"><strong>${s.name}</strong><span class="tile-count">${count}/20</span></div>
+        <div class="tile-bar"><div class="tile-bar-fill" style="width:${pct}%"></div></div>
+        <span class="tile-sub">${st.testsCompleted >= 20 ? "Full set complete \u2013 great work!" : "Practice tests completed"}</span>
+      </button>`;
+  }).join("");
+  byId("overviewGrid").querySelectorAll(".subject-tile").forEach(btn => {
+    btn.addEventListener("click", () => activateSubject(btn.dataset.goto));
+  });
+}
+
+// ---------------- Rendering: tabs & panels ----------------
+function renderTabsAndPanels(){
+  byId("subjectTabs").innerHTML = SUBJECTS.map((s,i) => `<button class="tab${i===0?" active":""}" data-tab="${s.id}" type="button">${s.name}</button>`).join("");
+  byId("subjectPanels").innerHTML = SUBJECTS.map((s,i) => `<section class="panel${i===0?" active":""}" id="panel-${s.id}"></section>`).join("");
+
+  byId("subjectTabs").querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => activateSubject(tab.dataset.tab));
+  });
+
+  SUBJECTS.forEach(s => renderSubjectPanel(s));
+}
+
+function activateSubject(id){
+  byId("subjectTabs").querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === id));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
+  const target = document.getElementById("panel-" + id);
+  if(target && typeof target.scrollIntoView === "function"){
+    target.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+
+function testBadgeHtml(subject){
+  const st = ensureSubjectState(subject.id);
+  const displayNum = (st.testsCompleted % 20) + 1;
+  return `<span class="badge${st.testsCompleted>0 && st.testsCompleted%20===0 ? " done":""}">Practice Test ${Math.min(displayNum,20)} of 20</span>`;
+}
+
+function renderSubjectPanel(subject){
+  const panel = byId("panel-" + subject.id);
+  panel.innerHTML = `
+    <article class="real-papers">
+      <h3>Real HSC past papers</h3>
+      ${realPapersHtml(subject)}
+    </article>
+    <article class="test-head">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">${subject.name}</p>
+          <h2>Practice tests</h2>
+        </div>
+        <div class="button-row">
+          <button id="newTest-${subject.id}">New test</button>
+          <button class="secondary" id="completeTest-${subject.id}">Mark test complete</button>
+        </div>
+      </div>
+      <div class="test-progress" id="progress-${subject.id}">${testBadgeHtml(subject)}</div>
+      <div class="topic-legend">${subject.topics.map(t => `<span>${t}</span>`).join("")}</div>
+    </article>
+    <div id="questions-${subject.id}"></div>
+  `;
+
+  byId("newTest-" + subject.id).addEventListener("click", () => renderTest(subject));
+  byId("completeTest-" + subject.id).addEventListener("click", () => {
+    const st = ensureSubjectState(subject.id);
+    st.testsCompleted += 1;
+    saveState();
+    logStudyToday();
+    byId("progress-" + subject.id).innerHTML = testBadgeHtml(subject);
+    renderOverview();
+  });
+
+  renderTest(subject);
+}
+
+function renderTest(subject){
+  const container = byId("questions-" + subject.id);
+  if(subject.type === "mcq"){
+    renderMcqTest(subject, container);
+  } else if(subject.type === "numeric"){
+    renderNumericTest(subject, container);
+  } else if(subject.type === "essay"){
+    renderEssayTest(subject, container);
+  }
+}
+
+// ---------------- MCQ test renderer ----------------
+function renderMcqTest(subject, container){
+  const items = subject.numeric && subject.numeric.length ? [] : [];
+  const mcqCount = 6;
+  const numericCount = subject.numeric && subject.numeric.length ? 2 : 0;
+  const questions = [];
+  for(let i=0;i<mcqCount;i++) questions.push({ kind:"mcq", data: nextFromBank(subject.id, "mcq", subject.bank) });
+  for(let i=0;i<numericCount;i++) questions.push({ kind:"numeric", data: nextFromBank(subject.id, "numeric", subject.numeric) });
+
+  container.innerHTML = questions.map((item, index) => {
+    if(item.kind === "mcq"){
+      const q = item.data;
+      return `
+        <article class="q-card">
+          <span class="q-topic">${q.topic}</span>
+          <p class="q-prompt"><strong>${index+1}.</strong> ${q.q}</p>
+          <div class="options" id="opts-${subject.id}-${index}">
+            ${q.options.map((opt,oi) => `<button class="option-btn" data-oi="${oi}" type="button">${opt}</button>`).join("")}
+          </div>
+          <div class="q-explain" id="explain-${subject.id}-${index}">${q.explain}</div>
+        </article>`;
+    }
+    const q = item.data;
+    return `
+      <article class="q-card">
+        <span class="q-topic">${q.topic}</span>
+        <p class="q-prompt"><strong>${index+1}.</strong> ${q.prompt}</p>
+        <p class="q-help">${q.help}</p>
+        <div class="numeric-row">
+          <input type="number" step="0.01" id="input-${subject.id}-${index}" aria-label="Answer for question ${index+1}">
+          <button data-check="${index}">Check</button>
+        </div>
+        <span class="q-feedback" id="feedback-${subject.id}-${index}"></span>
+      </article>`;
+  }).join("");
+
+  questions.forEach((item, index) => {
+    if(item.kind === "mcq"){
+      const q = item.data;
+      const wrap = byId(`opts-${subject.id}-${index}`);
+      wrap.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const oi = Number(btn.dataset.oi);
+          wrap.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected","correct","incorrect"));
+          if(oi === q.correct){
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            wrap.children[q.correct].classList.add("correct");
+          }
+          byId(`explain-${subject.id}-${index}`).classList.add("show");
+        });
+      });
+    } else {
+      const q = item.data;
+      const checkBtn = container.querySelector(`button[data-check="${index}"]`);
+      checkBtn.addEventListener("click", () => {
+        const input = byId(`input-${subject.id}-${index}`);
+        const feedback = byId(`feedback-${subject.id}-${index}`);
+        if(input.value.trim() === ""){ feedback.textContent = "Try an answer first."; feedback.className="q-feedback"; return; }
+        const value = Number(input.value);
+        const tolerance = Number.isInteger(q.answer) ? 0.01 : 0.06;
+        if(Math.abs(value - q.answer) <= tolerance){
+          feedback.textContent = `Correct! ${q.answer}`;
+          feedback.className = "q-feedback correct";
+        } else {
+          feedback.textContent = `Review it. Answer: ${q.answer}`;
+          feedback.className = "q-feedback incorrect";
+        }
+      });
+    }
+  });
+}
+
+// ---------------- Numeric-only test renderer (Maths subjects) ----------------
+function renderNumericTest(subject, container){
+  const count = 8;
+  const questions = Array.from({length:count}, () => nextFromBank(subject.id, "numeric", subject.bank));
+  container.innerHTML = questions.map((q, index) => `
+    <article class="q-card">
+      <span class="q-topic">${q.topic}</span>
+      <p class="q-prompt"><strong>${index+1}.</strong> ${q.prompt}</p>
+      <p class="q-help">${q.help}</p>
+      <div class="numeric-row">
+        <input type="number" step="0.01" id="input-${subject.id}-${index}" aria-label="Answer for question ${index+1}">
+        <button data-check="${index}">Check</button>
+      </div>
+      <span class="q-feedback" id="feedback-${subject.id}-${index}"></span>
+    </article>
+  `).join("");
+
+  questions.forEach((q, index) => {
+    const checkBtn = container.querySelector(`button[data-check="${index}"]`);
+    checkBtn.addEventListener("click", () => {
+      const input = byId(`input-${subject.id}-${index}`);
+      const feedback = byId(`feedback-${subject.id}-${index}`);
+      if(input.value.trim() === ""){ feedback.textContent = "Try an answer first."; feedback.className="q-feedback"; return; }
+      const value = Number(input.value);
+      const tolerance = Number.isInteger(q.answer) ? 0.01 : 0.06;
+      if(Math.abs(value - q.answer) <= tolerance){
+        feedback.textContent = `Correct! ${q.answer}`;
+        feedback.className = "q-feedback correct";
+      } else {
+        feedback.textContent = `Review it. Answer: ${q.answer}`;
+        feedback.className = "q-feedback incorrect";
+      }
+    });
+  });
+}
+
+// ---------------- Essay test renderer ----------------
+function renderEssayTest(subject, container){
+  const prompts = [nextFromBank(subject.id, "essay", subject.bank), nextFromBank(subject.id, "essay", subject.bank)];
+  container.innerHTML = prompts.map((p, index) => `
+    <article class="essay-prompt">
+      <span class="q-topic">${p.topic}</span>
+      <p class="prompt-text"><strong>${index+1}.</strong> ${p.prompt}</p>
+      <textarea placeholder="Plan or draft your response here (optional, not saved)..." id="draft-${subject.id}-${index}"></textarea>
+      <div class="checklist">
+        ${subject.checklist.map((c,ci) => `<label><input type="checkbox" id="chk-${subject.id}-${index}-${ci}"> ${c}</label>`).join("")}
+      </div>
+      <div class="band6"><strong>What Band 6 looks like:</strong> ${subject.band6}</div>
+    </article>
+  `).join("");
+}
+
+// ---------------- Init ----------------
+setHeaderStats();
+renderOverview();
+renderTabsAndPanels();
+</script>
+</body>
+</html>
